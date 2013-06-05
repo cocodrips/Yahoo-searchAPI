@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+  <title>--</title>
+  <meta name="Keywords" content="" />
+  <meta name="Description" content="ここ説明" />
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="{{ url_for('static', filename='script/jquery-1.9.1.min.js')}}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" type="text/css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap-responsive.min.css') }}" type="text/css" />
+
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/all.css') }}" type="text/css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/vis_parts.css') }}" type="text/css" />
+
+  <script src="{{ url_for('static', filename='script/lib/d3/d3.js')}}"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+
+</head>
+<body>
+
+
+<div class="container">
+  <div class="row-fluid">
+    <div class="span12">
+      <form action="vis" method="POST" style="margin: 10px;">
+        <div class="input-append " style="text-align:left;">
+          <input class="span2" id="appendedInputButton" size="16" type="text" name="word" placeholder="Word">
+          <button class="btn" type="submit">Search</button>
+          <select class="span2" name="query_num">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </form>
+      <h2>{{ word }}</h2>
+      {{ sample_text }}
+      {{ array }}
+
+
+      <h3>Titles</h3>
+      {% for title in titles %}
+      <p>
+        {{title}}
+      </p>
+      {% endfor %}
+
+      <h3>Matching</h3>
+      <table class="matching_table">
+       {% for row in matching %}
+        <tr>
+          {% for col in row %}
+          {% if col == True  %}
+            <td>◯</td>
+          {% else %}
+            <td>✕</td>
+          {% endif %}
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+
+
+      <h3>TOP Keyword</h3>
+      {% if keyword != "" %}
+
+      <table class="key_table">
+        {% for i in range(0,12) %}
+        {% if i % 3 == 0%}
+        <tr>
+        {% endif %}
+        <td>
+          <div class="key_table_child" id="key_table{{i}}">
+            {% for j in range(0, query_num) %}
+              <div class="graph" style="height:{{key_counts[j][i]*5 + 1}}px ; background-color: hsl({{25 * j % 360 }},95%,50%);"> </div>
+            {% endfor %}
+          </div>
+          {{i}} : {{keyword[i]}}
+        </td>
+        {% if i % 3 == 2%}
+        </tr>
+        {% endif %}
+
+        {% endfor %}
+      </table>
+      {% endif %}
+
+
+      <h3>Links</h3>
+      {% for data in links %}
+      <p>
+        <a href="{{data.url}}">{{data.url}}</a>
+        <br>
+        {% for url in data.childUrl %}
+        {{url}}<br>
+        {% endfor %}
+      </p>
+      {% endfor %}
+    </div>
+  </div>
+  <div id="static_keyword" data-keyword="{{keyword}}"></div>
+
+  <script type="text/javascript">
+    $(function(){
+      console.log($("static_keyword").attr('data-keyword'));
+      $(".graph").each(function(){
+        console.log($(this).css('height'));
+        var height = Math.min( parseInt($(this).css('height')), 100);
+        $(this).css("height", height+"px");
+        console.log(height)
+
+      });
+    });
+
+  </script>
+</body>
+</html>

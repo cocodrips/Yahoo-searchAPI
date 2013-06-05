@@ -1,0 +1,29 @@
+.matching_table td{
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
+    text-align: center;
+}
+
+.key_table{
+    width: 100%;
+}
+
+.key_table td{
+    width: 200px;
+    height: 100px;
+    vertical-align: bottom;
+    margin-bottom: 10px;
+}
+
+.key_table_child{
+    vertical-align: bottom;
+
+}
+.graph{
+    margin-right: 1px;
+    vertical-align: bottom;
+    width: 10px;
+    background-color: #1e90ff;
+    display: inline-block;
+}
